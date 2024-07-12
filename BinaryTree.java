@@ -33,7 +33,6 @@ public class BinaryTree {
         if (root==null) {
             return list;
         }
-
         Stack<Node> st=new Stack<>();
         st.push(root);
         while (!st.isEmpty()) {
@@ -49,6 +48,31 @@ public class BinaryTree {
         return list;
     }
 
+    //Iterative Inorder Traversal
+    public static List<Integer> IterativeInorderTraversal(Node root) {
+        List<Integer> list=new ArrayList<>();
+        if (root==null) {
+            return list;
+        }
+        Stack <Node> st= new Stack<>();
+        Node node=root;
+
+        while (true) {
+            if (node!=null) {
+                st.push(node);
+                node=node.left;
+            }else{
+                if (st.isEmpty()) {
+                    break;
+                }
+                node=st.pop();
+                list.add(node.value);
+                node=node.right;
+            }
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         // Constructing a sample binary tree:
         //         1
@@ -56,6 +80,7 @@ public class BinaryTree {
         //       2   3
         //      / \   \
         //     4   5   6
+        // 4, 2, 5, 1, 3, 6
 
         Node root = new Node(1);
         root.left = new Node(2);
@@ -65,9 +90,9 @@ public class BinaryTree {
         root.right.right = new Node(6);
 
         // Performing iterative preorder traversal
-        List<Integer> result = IterativePreorderTraversal(root);
+        List<Integer> result = IterativeInorderTraversal(root);
 
         // Printing the result
-        System.out.println("Preorder Traversal: " + result);
+        System.out.println(result);
     }
 }
