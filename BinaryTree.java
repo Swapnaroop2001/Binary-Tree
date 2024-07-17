@@ -95,6 +95,36 @@ public class BinaryTree {
         return list;
     }
 
+    //Maximu Depth of Array
+    public static int MaxDepth(Node root) {
+        if (root==null) {
+            return 0;
+        }
+        int lh=MaxDepth(root.left);
+        int rh=MaxDepth(root.right);
+        return 1+Math.max(lh, rh);
+    }
+
+    //Check if tree is balanced
+    public static boolean isBalanced(Node root){
+        return dfsHeight(root) !=-1;
+    }
+    public static int dfsHeight(Node root){
+        if (root==null) {
+            return 0;
+        }
+        int lh=dfsHeight(root.left);
+        if (lh==-1) { return -1;}
+
+        int rh=dfsHeight(root.right);
+        if (rh==-1) { return -1;}
+
+        if (Math.abs(lh-rh)>1) return -1;
+
+        return Math.max(lh, rh)+1;
+    }
+
+
 
     public static void main(String[] args) {
         // Constructing a sample binary tree:
@@ -113,7 +143,7 @@ public class BinaryTree {
         root.right.right = new Node(6);
 
         // Performing iterative preorder traversal
-        List<Integer> result = IterativePostorderTraversal(root);
+        boolean  result = isBalanced(root);
 
         // Printing the result
         System.out.println(result);
