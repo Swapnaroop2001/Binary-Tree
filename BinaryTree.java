@@ -95,13 +95,13 @@ public class BinaryTree {
         return list;
     }
 
-    //Maximu Depth of Array
-    public static int MaxDepth(Node root) {
+    //Height or Maximu Depth of tree
+    public static int findHeight(Node root) {
         if (root==null) {
             return 0;
         }
-        int lh=MaxDepth(root.left);
-        int rh=MaxDepth(root.right);
+        int lh=findHeight(root.left);
+        int rh=findHeight(root.right);
         return 1+Math.max(lh, rh);
     }
 
@@ -124,6 +124,23 @@ public class BinaryTree {
         return Math.max(lh, rh)+1;
     }
 
+    //Diameter of the tree
+    public static int findDiameter(Node root){
+        int [] Diameter=new int[1];
+        findHeight(root, Diameter);
+        return Diameter[0];
+    }
+    public static int findHeight(Node root, int[] Diameter){
+        if (root==null) {
+            return 0;
+        }
+        int lh=findHeight(root.left, Diameter);
+        int rh=findHeight(root.right, Diameter);
+
+        Diameter[0]=Math.max(Diameter[0],lh+rh);
+        return Math.max(lh, rh)+1;
+    }
+
 
 
     public static void main(String[] args) {
@@ -143,7 +160,7 @@ public class BinaryTree {
         root.right.right = new Node(6);
 
         // Performing iterative preorder traversal
-        boolean  result = isBalanced(root);
+        int  result = findDiameter(root);
 
         // Printing the result
         System.out.println(result);
