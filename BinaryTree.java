@@ -160,7 +160,6 @@ public class BinaryTree {
         maxPathDown(root, maxValue);
         return maxValue[0];
     }
-
     public static int maxPathDown(Node root, int[] maxValue) {
         if (root == null) {
             return 0;
@@ -170,6 +169,18 @@ public class BinaryTree {
         maxValue[0] = Math.max(maxValue[0], root.value + lsum + Rsum);
         return root.value + Math.max(lsum, Rsum);
     }
+
+    //Check if trees are same
+    public static boolean isSameTree(Node p, Node q) {
+        if (p==null && q==null) {
+            return p==q;
+        }
+        return (p.value)==(q.value) && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+
+
+
 
     public static void main(String[] args) {
         // Constructing a sample binary tree:
@@ -191,10 +202,20 @@ public class BinaryTree {
         root.left.left.right = new Node(-2);
         root.left.right.right = new Node(1);
 
+        Node root2 = new Node(10);
+        root2.left = new Node(5);
+        root2.right = new Node(-3);
+        root2.left.left = new Node(3);
+        root2.left.right = new Node(2);
+        root2.right.right = new Node(11);
+        root2.left.left.left = new Node(3);
+        root2.left.left.right = new Node(-2);
+        root2.left.right.right = new Node(1);
+
         // Performing iterative preorder traversal
-        int result = maxPathSum(root);
+        boolean answer=isSameTree(root,root2);
 
         // Printing the result
-        System.out.println(result);
+        System.out.println(answer);
     }
 }
