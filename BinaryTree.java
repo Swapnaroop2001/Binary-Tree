@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 
@@ -178,6 +180,34 @@ public class BinaryTree {
         return (p.value)==(q.value) && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
+    //103. Binary Tree Zigzag Level Order Traversal
+    public static List<List<Integer>> zigzagLevelOrder(Node root) {
+        List <List<Integer>> result=new ArrayList<>() ;
+        if (root==null) {
+            return result;
+        }
+        boolean LeftToRight=true;
+        Queue<Node> queue = new LinkedList<>(); 
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int size=queue.size();
+            LinkedList<Integer> level = new LinkedList<>();
+            for (int i = 0; i < size; i++) {
+                Node node= queue.poll();
+                if (LeftToRight) {
+                    level.addLast(node.value);
+                }else{
+                    level.addFirst(node.value);
+                }
+
+                if (node.left!=null) { queue.offer(node.left); }
+                if (node.right!=null) { queue.offer(node.right); }
+            }
+            result.add(level);
+            LeftToRight= !LeftToRight;
+        }
+        return result;
+    }
 
 
 
@@ -213,7 +243,7 @@ public class BinaryTree {
         root2.left.right.right = new Node(1);
 
         // Performing iterative preorder traversal
-        boolean answer=isSameTree(root,root2);
+        List answer=zigzagLevelOrder(root);
 
         // Printing the result
         System.out.println(answer);
