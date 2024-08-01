@@ -299,6 +299,38 @@ public class BinaryTree {
         return ans;
     }
 
+    //Bottom view of binary tree
+    public static ArrayList<Integer> bottomView(Node root){
+        ArrayList<Integer> ans=new ArrayList<>();
+        if (root==null) {
+            return ans;
+        }
+
+        Map<Integer, Integer> map=new TreeMap<>();
+        Queue<Pair> q= new LinkedList<Pair>();
+        q.add(new Pair(root, 0));
+        while (!q.isEmpty()) {
+            Pair pair=q.poll();
+            int hd= pair.hd;
+            Node temp= pair.node;
+            map.put(hd,temp.value);
+
+            
+            if (temp.left!=null) {
+                q.add(new Pair(temp.left, hd-1));
+            }
+
+            if (temp.right!=null) {
+                q.add(new Pair(temp.right, hd+1));
+            }
+
+            
+        }
+        for(Map.Entry<Integer, Integer> entry :map.entrySet()){
+            ans.add(entry.getValue());
+        }
+        return ans;
+    }
 
 
 
@@ -333,7 +365,7 @@ public class BinaryTree {
         root2.left.right.right = new Node(1);
 
         // Performing iterative preorder traversal
-        ArrayList<Integer> answer= topView(root);
+        ArrayList<Integer> answer= bottomView(root);
 
 
         // Printing the result
