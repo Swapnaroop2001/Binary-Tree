@@ -332,6 +332,39 @@ public class BinaryTree {
         return ans;
     }
 
+    //Right View of Binary tree
+    public static List<Integer> rightSideView(Node root){
+        List<Integer> result= new ArrayList<>();
+        rightView(root, result, 0);
+        return result;
+    }
+    public static void rightView(Node curr, List<Integer> result, int currDepth){
+        if (curr==null) {
+            return;
+        }
+        if (currDepth==result.size()) {
+            result.add(curr.value);
+        }
+        rightView(curr.right,result, currDepth+1);
+        rightView(curr.left,result, currDepth+1);
+    }
+
+    //Left View of Binary tree
+    public static List<Integer> leftSideView(Node root){
+        List<Integer> result= new ArrayList<>();
+        leftView(root, result, 0);
+        return result;
+    }
+    public static void leftView(Node curr, List<Integer> result, int currDepth){
+        if (curr==null) {
+            return;
+        }
+        if (currDepth==result.size()) {
+            result.add(curr.value);
+        }
+        leftView(curr.left,result, currDepth+1);
+        leftView(curr.right,result, currDepth+1);
+    }
 
 
     public static void main(String[] args) {
@@ -365,7 +398,7 @@ public class BinaryTree {
         root2.left.right.right = new Node(1);
 
         // Performing iterative preorder traversal
-        ArrayList<Integer> answer= bottomView(root);
+        List<Integer> answer= leftSideView(root);
 
 
         // Printing the result
