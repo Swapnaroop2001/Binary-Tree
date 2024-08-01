@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
-
+import java.util.TreeMap;
 
 /**
  * BinaryTree
@@ -209,6 +210,95 @@ public class BinaryTree {
         return result;
     }
 
+    //Boundry Traversal 
+    public static ArrayList<Integer> boundaryTraversal(Node root) {
+        ArrayList <Integer> list= new ArrayList<>();
+        if (root==null) {
+            return list;
+        }
+        if (!isLeaf(root)) {
+            list.add(root.value);
+        }
+        addLeftBoundry(root, list);
+        addLeaf(root, list);
+        addRightBoundry(root, list);
+        return list;
+    }
+    private static boolean isLeaf(Node root) {
+        return root.left == null && root.right == null;
+    }
+    private static void addLeftBoundry(Node root, ArrayList <Integer> list){
+        Node cur= root.left;
+        while (cur!=null) {
+            if (!isLeaf(cur)) list.add(cur.value); 
+            if (cur.left!=null) cur=cur.left;
+            else cur=cur.right;
+        }
+    }
+    private static void addRightBoundry(Node root, ArrayList <Integer> list){
+        ArrayList<Integer> rightBoundry=new ArrayList<>();
+        Node cur= root.right;
+        while (cur!=null) {
+            if (!isLeaf(cur)) rightBoundry.add(cur.value); 
+            if (cur.right!=null) cur=cur.right;
+            else cur=cur.left;
+        }
+        for (int i =rightBoundry.size()-1; i >= 0 ; i--) {
+            list.add(rightBoundry.get(i));
+        }
+    }
+    private static void addLeaf(Node root,ArrayList <Integer> list){
+        if(isLeaf(root)) list.add(root.value);
+        if(root.left!=null) addLeaf(root.left, list);
+        if(root.right!=null) addLeaf(root.right, list);
+    }
+
+    /**
+     * Pair
+     */ 
+    public static class Pair {
+        Node node;
+        int hd;
+        Pair(Node root, int hd){
+            this.node=root;
+            this.hd=hd;
+        };
+    }
+    //Top view of binary tree
+    public static ArrayList<Integer> topView(Node root){
+        ArrayList<Integer> ans=new ArrayList<>();
+        if (root==null) {
+            return ans;
+        }
+
+        Map<Integer, Integer> map=new TreeMap<>();
+        Queue<Pair> q=new LinkedList<Pair>();
+        q.add(new Pair(root, 0));
+
+        while (!q.isEmpty()) {
+            Pair pair=q.poll();
+            int hd= pair.hd;
+            Node temp= pair.node;
+
+            if (map.get(hd)==null) {
+                map.put(hd,temp.value);
+            }
+
+            if (temp.left!=null) {
+                q.add(new Pair(temp.left, hd-1));
+            }
+
+            if (temp.right!=null) {
+                q.add(new Pair(temp.right, hd+1));
+            }
+
+        }
+        for(Map.Entry<Integer, Integer> entry :map.entrySet()){
+            ans.add(entry.getValue());
+        }
+        return ans;
+    }
+
 
 
 
@@ -243,7 +333,8 @@ public class BinaryTree {
         root2.left.right.right = new Node(1);
 
         // Performing iterative preorder traversal
-        List answer=zigzagLevelOrder(root);
+        ArrayList<Integer> answer= topView(root);
+
 
         // Printing the result
         System.out.println(answer);
