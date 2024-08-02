@@ -366,26 +366,37 @@ public class BinaryTree {
         leftView(curr.right,result, currDepth+1);
     }
 
+    //Symmetric tree
+    public static boolean isSymmetric(Node root){
+        return root==null || isSymmetricHelp(root.left, root.right);
+    }
+    private static boolean isSymmetricHelp(Node left, Node right){
+        if (left==null ||right==null) {
+            return right==left;
+        }
+        if (left.value!=right.value) return false;
+        return isSymmetricHelp(left.left, right.right) && isSymmetricHelp(left.right, right.left);
+    }
+
 
     public static void main(String[] args) {
-        // Constructing a sample binary tree:
-        //         10
-        //        /  \
-        //       5    -3
-        //      / \     \
-        //     3   2     11
-        //    / \   \   
-        //   3  -2   1 
+        // Creating the following symmetric binary tree
+        //            10
+        //           /  \
+        //          5     5
+        //         / \   / \
+        //        3   2 2   3
 
         Node root = new Node(10);
         root.left = new Node(5);
-        root.right = new Node(-3);
+        root.right = new Node(5);
         root.left.left = new Node(3);
         root.left.right = new Node(2);
-        root.right.right = new Node(11);
-        root.left.left.left = new Node(3);
-        root.left.left.right = new Node(-2);
-        root.left.right.right = new Node(1);
+        root.right.left = new Node(2);
+        root.right.right = new Node(3);
+        // root.left.left.left = new Node(9);
+        // root.left.left.right = new Node(-2);
+        // root.left.right.right = new Node(1);
 
         Node root2 = new Node(10);
         root2.left = new Node(5);
@@ -398,8 +409,7 @@ public class BinaryTree {
         root2.left.right.right = new Node(1);
 
         // Performing iterative preorder traversal
-        List<Integer> answer= leftSideView(root);
-
+        Boolean answer= isSymmetric(root);
 
         // Printing the result
         System.out.println(answer);
