@@ -378,38 +378,74 @@ public class BinaryTree {
         return isSymmetricHelp(left.left, right.right) && isSymmetricHelp(left.right, right.left);
     }
 
+    //Print root to node Path
+    public static ArrayList<Integer> solve(Node root, int B){
+        ArrayList<Integer> result= new ArrayList<>();
+        if(root ==null) return result;
+        getPath(root, result, B);
+        return result;
+    }
+    private static boolean getPath(Node root, ArrayList<Integer> arr, int x){
+        if (root==null) {
+            return false;
+        }
+        arr.add(root.value);
+        if (root.value==x) {
+            return true;
+        }
+        if (getPath(root.left, arr, x)|| getPath(root.right, arr, x)) {
+            return true;
+        }
+
+        arr.remove(arr.size()-1);
+        return false;
+    }
+
+    //Lowest Common Ancestor
+    public static Node lowestCommonAncestor(Node root, Node p,Node q){
+        if (root==null ||  root==p || root==q ) {
+            return root;
+        }
+        Node left=lowestCommonAncestor(root.left, p, q);
+        Node right=lowestCommonAncestor(root.right, p, q);
+
+        if (left==null) {
+            return right;
+        }
+        else if (right==null) {
+            return left;
+        }
+        else{
+            return root;
+        }
+    }
+
+
+
 
     public static void main(String[] args) {
-        // Creating the following symmetric binary tree
+        // Creating the following asymmetric binary tree
         //            10
         //           /  \
-        //          5     5
-        //         / \   / \
-        //        3   2 2   3
+        //          4    5
+        //         / \  / \
+        //        3   2 11  9
+        //       / \    \
+        //      4   7    8
 
         Node root = new Node(10);
-        root.left = new Node(5);
+        root.left = new Node(4);
         root.right = new Node(5);
         root.left.left = new Node(3);
         root.left.right = new Node(2);
-        root.right.left = new Node(2);
-        root.right.right = new Node(3);
-        // root.left.left.left = new Node(9);
-        // root.left.left.right = new Node(-2);
-        // root.left.right.right = new Node(1);
-
-        Node root2 = new Node(10);
-        root2.left = new Node(5);
-        root2.right = new Node(-3);
-        root2.left.left = new Node(3);
-        root2.left.right = new Node(2);
-        root2.right.right = new Node(11);
-        root2.left.left.left = new Node(3);
-        root2.left.left.right = new Node(-2);
-        root2.left.right.right = new Node(1);
+        root.right.left = new Node(11);
+        root.right.right = new Node(9);
+        root.left.left.left = new Node(4);
+        root.left.left.right = new Node(7);
+        root.right.left.right = new Node(8);
 
         // Performing iterative preorder traversal
-        Boolean answer= isSymmetric(root);
+        ArrayList<Integer> answer= solve(root, 7);
 
         // Printing the result
         System.out.println(answer);
