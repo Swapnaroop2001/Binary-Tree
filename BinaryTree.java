@@ -6,6 +6,8 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
 
+
+
 /**
  * BinaryTree
  */
@@ -163,6 +165,7 @@ public class BinaryTree {
         maxPathDown(root, maxValue);
         return maxValue[0];
     }
+
     public static int maxPathDown(Node root, int[] maxValue) {
         if (root == null) {
             return 0;
@@ -173,47 +176,51 @@ public class BinaryTree {
         return root.value + Math.max(lsum, Rsum);
     }
 
-    //Check if trees are same
+    // Check if trees are same
     public static boolean isSameTree(Node p, Node q) {
-        if (p==null && q==null) {
-            return p==q;
+        if (p == null && q == null) {
+            return p == q;
         }
-        return (p.value)==(q.value) && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        return (p.value) == (q.value) && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
-    //103. Binary Tree Zigzag Level Order Traversal
+    // 103. Binary Tree Zigzag Level Order Traversal
     public static List<List<Integer>> zigzagLevelOrder(Node root) {
-        List <List<Integer>> result=new ArrayList<>() ;
-        if (root==null) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (root == null) {
             return result;
         }
-        boolean LeftToRight=true;
-        Queue<Node> queue = new LinkedList<>(); 
+        boolean LeftToRight = true;
+        Queue<Node> queue = new LinkedList<>();
         queue.offer(root);
         while (!queue.isEmpty()) {
-            int size=queue.size();
+            int size = queue.size();
             LinkedList<Integer> level = new LinkedList<>();
             for (int i = 0; i < size; i++) {
-                Node node= queue.poll();
+                Node node = queue.poll();
                 if (LeftToRight) {
                     level.addLast(node.value);
-                }else{
+                } else {
                     level.addFirst(node.value);
                 }
 
-                if (node.left!=null) { queue.offer(node.left); }
-                if (node.right!=null) { queue.offer(node.right); }
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
             }
             result.add(level);
-            LeftToRight= !LeftToRight;
+            LeftToRight = !LeftToRight;
         }
         return result;
     }
 
-    //Boundry Traversal 
+    // Boundry Traversal
     public static ArrayList<Integer> boundaryTraversal(Node root) {
-        ArrayList <Integer> list= new ArrayList<>();
-        if (root==null) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (root == null) {
             return list;
         }
         if (!isLeaf(root)) {
@@ -224,243 +231,264 @@ public class BinaryTree {
         addRightBoundry(root, list);
         return list;
     }
+
     private static boolean isLeaf(Node root) {
         return root.left == null && root.right == null;
     }
-    private static void addLeftBoundry(Node root, ArrayList <Integer> list){
-        Node cur= root.left;
-        while (cur!=null) {
-            if (!isLeaf(cur)) list.add(cur.value); 
-            if (cur.left!=null) cur=cur.left;
-            else cur=cur.right;
+
+    private static void addLeftBoundry(Node root, ArrayList<Integer> list) {
+        Node cur = root.left;
+        while (cur != null) {
+            if (!isLeaf(cur))
+                list.add(cur.value);
+            if (cur.left != null)
+                cur = cur.left;
+            else
+                cur = cur.right;
         }
     }
-    private static void addRightBoundry(Node root, ArrayList <Integer> list){
-        ArrayList<Integer> rightBoundry=new ArrayList<>();
-        Node cur= root.right;
-        while (cur!=null) {
-            if (!isLeaf(cur)) rightBoundry.add(cur.value); 
-            if (cur.right!=null) cur=cur.right;
-            else cur=cur.left;
+
+    private static void addRightBoundry(Node root, ArrayList<Integer> list) {
+        ArrayList<Integer> rightBoundry = new ArrayList<>();
+        Node cur = root.right;
+        while (cur != null) {
+            if (!isLeaf(cur))
+                rightBoundry.add(cur.value);
+            if (cur.right != null)
+                cur = cur.right;
+            else
+                cur = cur.left;
         }
-        for (int i =rightBoundry.size()-1; i >= 0 ; i--) {
+        for (int i = rightBoundry.size() - 1; i >= 0; i--) {
             list.add(rightBoundry.get(i));
         }
     }
-    private static void addLeaf(Node root,ArrayList <Integer> list){
-        if(isLeaf(root)) list.add(root.value);
-        if(root.left!=null) addLeaf(root.left, list);
-        if(root.right!=null) addLeaf(root.right, list);
+
+    private static void addLeaf(Node root, ArrayList<Integer> list) {
+        if (isLeaf(root))
+            list.add(root.value);
+        if (root.left != null)
+            addLeaf(root.left, list);
+        if (root.right != null)
+            addLeaf(root.right, list);
     }
 
     /**
      * Pair
-     */ 
+     */
     public static class Pair {
         Node node;
         int hd;
-        Pair(Node root, int hd){
-            this.node=root;
-            this.hd=hd;
+
+        Pair(Node root, int hd) {
+            this.node = root;
+            this.hd = hd;
         };
     }
-    //Top view of binary tree
-    public static ArrayList<Integer> topView(Node root){
-        ArrayList<Integer> ans=new ArrayList<>();
-        if (root==null) {
+
+    // Top view of binary tree
+    public static ArrayList<Integer> topView(Node root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if (root == null) {
             return ans;
         }
 
-        Map<Integer, Integer> map=new TreeMap<>();
-        Queue<Pair> q=new LinkedList<Pair>();
+        Map<Integer, Integer> map = new TreeMap<>();
+        Queue<Pair> q = new LinkedList<Pair>();
         q.add(new Pair(root, 0));
 
         while (!q.isEmpty()) {
-            Pair pair=q.poll();
-            int hd= pair.hd;
-            Node temp= pair.node;
+            Pair pair = q.poll();
+            int hd = pair.hd;
+            Node temp = pair.node;
 
-            if (map.get(hd)==null) {
-                map.put(hd,temp.value);
+            if (map.get(hd) == null) {
+                map.put(hd, temp.value);
             }
 
-            if (temp.left!=null) {
-                q.add(new Pair(temp.left, hd-1));
+            if (temp.left != null) {
+                q.add(new Pair(temp.left, hd - 1));
             }
 
-            if (temp.right!=null) {
-                q.add(new Pair(temp.right, hd+1));
+            if (temp.right != null) {
+                q.add(new Pair(temp.right, hd + 1));
             }
 
         }
-        for(Map.Entry<Integer, Integer> entry :map.entrySet()){
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             ans.add(entry.getValue());
         }
         return ans;
     }
 
-    //Bottom view of binary tree
-    public static ArrayList<Integer> bottomView(Node root){
-        ArrayList<Integer> ans=new ArrayList<>();
-        if (root==null) {
+    // Bottom view of binary tree
+    public static ArrayList<Integer> bottomView(Node root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if (root == null) {
             return ans;
         }
 
-        Map<Integer, Integer> map=new TreeMap<>();
-        Queue<Pair> q= new LinkedList<Pair>();
+        Map<Integer, Integer> map = new TreeMap<>();
+        Queue<Pair> q = new LinkedList<Pair>();
         q.add(new Pair(root, 0));
         while (!q.isEmpty()) {
-            Pair pair=q.poll();
-            int hd= pair.hd;
-            Node temp= pair.node;
-            map.put(hd,temp.value);
+            Pair pair = q.poll();
+            int hd = pair.hd;
+            Node temp = pair.node;
+            map.put(hd, temp.value);
 
-            
-            if (temp.left!=null) {
-                q.add(new Pair(temp.left, hd-1));
+            if (temp.left != null) {
+                q.add(new Pair(temp.left, hd - 1));
             }
 
-            if (temp.right!=null) {
-                q.add(new Pair(temp.right, hd+1));
+            if (temp.right != null) {
+                q.add(new Pair(temp.right, hd + 1));
             }
 
-            
         }
-        for(Map.Entry<Integer, Integer> entry :map.entrySet()){
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             ans.add(entry.getValue());
         }
         return ans;
     }
 
-    //Right View of Binary tree
-    public static List<Integer> rightSideView(Node root){
-        List<Integer> result= new ArrayList<>();
+    // Right View of Binary tree
+    public static List<Integer> rightSideView(Node root) {
+        List<Integer> result = new ArrayList<>();
         rightView(root, result, 0);
         return result;
     }
-    public static void rightView(Node curr, List<Integer> result, int currDepth){
-        if (curr==null) {
+
+    public static void rightView(Node curr, List<Integer> result, int currDepth) {
+        if (curr == null) {
             return;
         }
-        if (currDepth==result.size()) {
+        if (currDepth == result.size()) {
             result.add(curr.value);
         }
-        rightView(curr.right,result, currDepth+1);
-        rightView(curr.left,result, currDepth+1);
+        rightView(curr.right, result, currDepth + 1);
+        rightView(curr.left, result, currDepth + 1);
     }
 
-    //Left View of Binary tree
-    public static List<Integer> leftSideView(Node root){
-        List<Integer> result= new ArrayList<>();
+    // Left View of Binary tree
+    public static List<Integer> leftSideView(Node root) {
+        List<Integer> result = new ArrayList<>();
         leftView(root, result, 0);
         return result;
     }
-    public static void leftView(Node curr, List<Integer> result, int currDepth){
-        if (curr==null) {
+
+    public static void leftView(Node curr, List<Integer> result, int currDepth) {
+        if (curr == null) {
             return;
         }
-        if (currDepth==result.size()) {
+        if (currDepth == result.size()) {
             result.add(curr.value);
         }
-        leftView(curr.left,result, currDepth+1);
-        leftView(curr.right,result, currDepth+1);
+        leftView(curr.left, result, currDepth + 1);
+        leftView(curr.right, result, currDepth + 1);
     }
 
-    //Symmetric tree
-    public static boolean isSymmetric(Node root){
-        return root==null || isSymmetricHelp(root.left, root.right);
+    // Symmetric tree
+    public static boolean isSymmetric(Node root) {
+        return root == null || isSymmetricHelp(root.left, root.right);
     }
-    private static boolean isSymmetricHelp(Node left, Node right){
-        if (left==null ||right==null) {
-            return right==left;
+
+    private static boolean isSymmetricHelp(Node left, Node right) {
+        if (left == null || right == null) {
+            return right == left;
         }
-        if (left.value!=right.value) return false;
+        if (left.value != right.value)
+            return false;
         return isSymmetricHelp(left.left, right.right) && isSymmetricHelp(left.right, right.left);
     }
 
-    //Print root to node Path
-    public static ArrayList<Integer> solve(Node root, int B){
-        ArrayList<Integer> result= new ArrayList<>();
-        if(root ==null) return result;
+    // Print root to node Path
+    public static ArrayList<Integer> solve(Node root, int B) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (root == null)
+            return result;
         getPath(root, result, B);
         return result;
     }
-    private static boolean getPath(Node root, ArrayList<Integer> arr, int x){
-        if (root==null) {
+
+    private static boolean getPath(Node root, ArrayList<Integer> arr, int x) {
+        if (root == null) {
             return false;
         }
         arr.add(root.value);
-        if (root.value==x) {
+        if (root.value == x) {
             return true;
         }
-        if (getPath(root.left, arr, x)|| getPath(root.right, arr, x)) {
+        if (getPath(root.left, arr, x) || getPath(root.right, arr, x)) {
             return true;
         }
 
-        arr.remove(arr.size()-1);
+        arr.remove(arr.size() - 1);
         return false;
     }
 
-    //Lowest Common Ancestor
-    public static Node lowestCommonAncestor(Node root, Node p,Node q){
-        if (root==null ||  root==p || root==q ) {
+    // Lowest Common Ancestor
+    public static Node lowestCommonAncestor(Node root, Node p, Node q) {
+        if (root == null || root == p || root == q) {
             return root;
         }
-        Node left=lowestCommonAncestor(root.left, p, q);
-        Node right=lowestCommonAncestor(root.right, p, q);
+        Node left = lowestCommonAncestor(root.left, p, q);
+        Node right = lowestCommonAncestor(root.right, p, q);
 
-        if (left==null) {
+        if (left == null) {
             return right;
-        }
-        else if (right==null) {
+        } else if (right == null) {
             return left;
-        }
-        else{
+        } else {
             return root;
         }
     }
 
-    //Children Sum Property in Binary Tree | O(N) Approach
-    public static void changeTree(Node root){
-        if (root==null) return ;
-        int child=0;
-        if (root.left!=null) {
-            child+=root.left.value;
+    // Children Sum Property in Binary Tree | O(N) Approach
+    public static void changeTree(Node root) {
+        if (root == null)
+            return;
+        int child = 0;
+        if (root.left != null) {
+            child += root.left.value;
         }
-        if (root.right!=null) {
-            child+=root.right.value;
+        if (root.right != null) {
+            child += root.right.value;
         }
-        if (child>=root.value) {
-            root.value=child;
-        }else{
-            if (root.left!=null) {
-                root.left.value=root.value;
-            }
-            else if(root.right != null) root.right.value=root.value;
+        if (child >= root.value) {
+            root.value = child;
+        } else {
+            if (root.left != null) {
+                root.left.value = root.value;
+            } else if (root.right != null)
+                root.right.value = root.value;
         }
         changeTree(root.left);
         changeTree(root.right);
 
-        int total=0;
-        if (root.left!=null)  total=root.left.value;
-        if (root.right!=null) total=root.right.value;
-        if (root.left!=null || root.right!=null) root.value=total;
+        int total = 0;
+        if (root.left != null)
+            total = root.left.value;
+        if (root.right != null)
+            total = root.right.value;
+        if (root.left != null || root.right != null)
+            root.value = total;
     }
-    
-    //Maximum width of the binary tree
+
+    // Maximum width of the binary tree
     public static int maxWidth(Node root) {
-        int maxWidth=0;
+        int maxWidth = 0;
         int width;
-        int h=findHeight(root);
-        for (int i = 0; i <=h; i++) {
-            width=getWidth(root,i);
+        int h = findHeight(root);
+        for (int i = 0; i <= h; i++) {
+            width = getWidth(root, i);
             if (width > maxWidth)
                 maxWidth = width;
         }
         return maxWidth;
     }
-    public static int getWidth(Node node, int level)
-    {
+
+    public static int getWidth(Node node, int level) {
         if (node == null)
             return 0;
 
@@ -468,23 +496,58 @@ public class BinaryTree {
             return 1;
         else if (level > 1)
             return getWidth(node.left, level - 1)
-                + getWidth(node.right, level - 1);
+                    + getWidth(node.right, level - 1);
         return 0;
     }
-    
 
+    // Print all nodes at a distance k from given node
+    List<Node> path = null;
+    public List<Integer> distanceK(Node root, Node target, int K) {
+        path = new ArrayList<>();
+        findPath(root, target);
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < path.size(); i++) {
+            findKDistanceFromNode(
+                    path.get(i), K - i, result, i == 0 ? null : path.get(i - 1));
+        }
+        return result;
+    }
+    public void findKDistanceFromNode(Node node,int dist,List<Integer> result,Node blocker) {
+        if (dist < 0 || node == null || (blocker != null && node == blocker)) {
+            return;
+        }
 
+        if (dist == 0) {
+            result.add(node.value);
+        }
 
+        findKDistanceFromNode(node.left, dist - 1, result,
+                blocker);
+        findKDistanceFromNode(node.right, dist - 1, result,
+                blocker);
+    }
+    private boolean findPath(Node node, Node target) {
+        if (node == null)
+            return false;
+
+        if (node == target || findPath(node.left, target)
+                || findPath(node.right, target)) {
+            path.add(node);
+            return true;
+        }
+
+        return false;
+    }
 
     public static void main(String[] args) {
         // Creating the following asymmetric binary tree
-        //            10
-        //           /  \
-        //          4    5
-        //         / \  / \
-        //        3   2 11  9
-        //       / \    \
-        //      4   7    8
+        // 10
+        // / \
+        // 4 5
+        // / \ / \
+        // 3 2 11 9
+        // / \ \
+        // 4 7 8
 
         Node root = new Node(10);
         root.left = new Node(4);
@@ -498,7 +561,7 @@ public class BinaryTree {
         root.right.left.right = new Node(8);
 
         // Performing iterative preorder traversal
-        int answer= maxWidth(root);
+        int answer = maxWidth(root);
 
         // Printing the result
         System.out.println(answer);
