@@ -6,7 +6,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
 
-
+import org.w3c.dom.Node;
 
 /**
  * BinaryTree
@@ -502,6 +502,7 @@ public class BinaryTree {
 
     // Print all nodes at a distance k from given node
     List<Node> path = null;
+
     public List<Integer> distanceK(Node root, Node target, int K) {
         path = new ArrayList<>();
         findPath(root, target);
@@ -512,7 +513,8 @@ public class BinaryTree {
         }
         return result;
     }
-    public void findKDistanceFromNode(Node node,int dist,List<Integer> result,Node blocker) {
+
+    public void findKDistanceFromNode(Node node, int dist, List<Integer> result, Node blocker) {
         if (dist < 0 || node == null || (blocker != null && node == blocker)) {
             return;
         }
@@ -526,6 +528,7 @@ public class BinaryTree {
         findKDistanceFromNode(node.right, dist - 1, result,
                 blocker);
     }
+
     private boolean findPath(Node node, Node target) {
         if (node == null)
             return false;
@@ -539,30 +542,79 @@ public class BinaryTree {
         return false;
     }
 
+    class Distance {
+        int val;
+
+        Distance(int d) {
+            val = d;
+        }
+    }
+
+    // Serialize Binary Tree
+    public static String serialize (Node root)  {
+        if (root==null) return "";
+        Queue<Node> q=new LinkedList<>();
+        StringBuilder res= new StringBuilder();
+        q.add(root);
+        while (!q.isEmpty()) {
+            Node node=q.poll();
+            if (node==null) {
+                res.append("n ");
+                continue;
+            }
+            res.append(node.value+" ");
+            q.add(node.left);
+            q.add(node.right);
+        }
+        return res.toString();
+    }
+
+    public static Node deSerialize(String data) {
+        if (data.equals(" ")) return null;
+        Queue<Node> q = new LinkedList<>();
+        String[] values = data.split(" ");
+        Node root = new Node(Integer.parseInt(values[0]));
+        q.add(root);
+        for (int i = 1; i < values.length; i++) {
+            Node parent = q.poll();
+            if (!values[i].equals("n")) {
+                Node left = new Node(Integer.parseInt(values[i]));
+                parent.left = left;
+                q.add(left);
+            }
+            if (++i < values.length && !values[i].equals("n")) {
+                Node right = new Node(Integer.parseInt(values[i]));
+                parent.right = right;
+                q.add(right);
+            }
+        }
+        return root;
+    }
+    
+
     public static void main(String[] args) {
         // Creating the following asymmetric binary tree
-        // 10
-        // / \
-        // 4 5
-        // / \ / \
-        // 3 2 11 9
-        // / \ \
-        // 4 7 8
+        //        10
+        //       /  \
+        //      4    5
+        //     / \  / \
+        //    3   2 11 9
+        //   / \     \
+        //  4   7     8
+        
+        Node root = new Node(10);          // Root node
+        root.left = new Node(4);           // Left subtree of root
+        root.right = new Node(5);          // Right subtree of root
+        root.left.left = new Node(3);      // Left child of node 4
+        root.left.right = new Node(2);     // Right child of node 4
+        root.right.left = new Node(11);    // Left child of node 5
+        root.right.right = new Node(9);    // Right child of node 5
+        root.left.left.left = new Node(4); // Left child of node 3
+        root.left.left.right = new Node(7);// Right child of node 3
+        root.right.left.right = new Node(8); // Right child of node 11
 
-        Node root = new Node(10);
-        root.left = new Node(4);
-        root.right = new Node(5);
-        root.left.left = new Node(3);
-        root.left.right = new Node(2);
-        root.right.left = new Node(11);
-        root.right.right = new Node(9);
-        root.left.left.left = new Node(4);
-        root.left.left.right = new Node(7);
-        root.right.left.right = new Node(8);
 
-        // Performing iterative preorder traversal
-        int answer = maxWidth(root);
-
+        String answer = serialize(root);
         // Printing the result
         System.out.println(answer);
     }
