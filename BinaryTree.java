@@ -5,9 +5,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
-
-import org.w3c.dom.Node;
-
 /**
  * BinaryTree
  */
@@ -589,6 +586,39 @@ public class BinaryTree {
             }
         }
         return root;
+    }
+
+    // Search in a Binary Search Tree
+    public static Node searchBST(Node root, int target){
+        while (root!=null && root.value!=target) {
+            if (root.value < target) {
+                root=root.right;
+            }else{
+                root=root.left;
+            }
+        }
+        return root;
+    }
+
+    //Ceil in a Binary Search Tree
+    public static int findCeil(Node root, int key){
+        int ceil= -1; 
+
+        while (root!= null) {
+            if (root.value==key) {
+                return root.value;
+            }
+
+            if (root.value> key) {
+                ceil=root.value;
+                root=root.left;
+            }
+            else{
+                root=root.right;
+            }
+        }
+        
+        return ceil;
     }
     
 
