@@ -620,6 +620,26 @@ public class BinaryTree {
         
         return ceil;
     }
+
+    //Floor in a Binary Search Tree
+    public static int findFloor(Node root, int key){
+        int floor=-1;
+        while (root!=null) {
+            if (root.value==key) {
+                return root.value;
+            }
+            if (root.value< key) {
+                floor=root.value;
+                root=root.right;
+            }
+            else{
+                root=root.left;
+            }
+        }
+        return floor;
+    }
+
+
     
 
     public static void main(String[] args) {
@@ -643,8 +663,9 @@ public class BinaryTree {
         root.left.left.right = new Node(7);// Right child of node 3
         root.right.left.right = new Node(8); // Right child of node 11
 
+        Node r= searchBST(root, 8);
 
-        String answer = serialize(root);
+        int answer =r.value;
         // Printing the result
         System.out.println(answer);
     }
