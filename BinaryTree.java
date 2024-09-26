@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
+
 /**
  * BinaryTree
  */
@@ -548,18 +549,19 @@ public class BinaryTree {
     }
 
     // Serialize Binary Tree
-    public static String serialize (Node root)  {
-        if (root==null) return "";
-        Queue<Node> q=new LinkedList<>();
-        StringBuilder res= new StringBuilder();
+    public static String serialize(Node root) {
+        if (root == null)
+            return "";
+        Queue<Node> q = new LinkedList<>();
+        StringBuilder res = new StringBuilder();
         q.add(root);
         while (!q.isEmpty()) {
-            Node node=q.poll();
-            if (node==null) {
+            Node node = q.poll();
+            if (node == null) {
                 res.append("n ");
                 continue;
             }
-            res.append(node.value+" ");
+            res.append(node.value + " ");
             q.add(node.left);
             q.add(node.right);
         }
@@ -567,7 +569,8 @@ public class BinaryTree {
     }
 
     public static Node deSerialize(String data) {
-        if (data.equals(" ")) return null;
+        if (data.equals(" "))
+            return null;
         Queue<Node> q = new LinkedList<>();
         String[] values = data.split(" ");
         Node root = new Node(Integer.parseInt(values[0]));
@@ -589,83 +592,144 @@ public class BinaryTree {
     }
 
     // Search in a Binary Search Tree
-    public static Node searchBST(Node root, int target){
-        while (root!=null && root.value!=target) {
+    public static Node searchBST(Node root, int target) {
+        while (root != null && root.value != target) {
             if (root.value < target) {
-                root=root.right;
-            }else{
-                root=root.left;
+                root = root.right;
+            } else {
+                root = root.left;
             }
         }
         return root;
     }
 
-    //Ceil in a Binary Search Tree
-    public static int findCeil(Node root, int key){
-        int ceil= -1; 
+    // Ceil in a Binary Search Tree
+    public static int findCeil(Node root, int key) {
+        int ceil = -1;
 
-        while (root!= null) {
-            if (root.value==key) {
+        while (root != null) {
+            if (root.value == key) {
                 return root.value;
             }
 
-            if (root.value> key) {
-                ceil=root.value;
-                root=root.left;
-            }
-            else{
-                root=root.right;
+            if (root.value > key) {
+                ceil = root.value;
+                root = root.left;
+            } else {
+                root = root.right;
             }
         }
-        
+
         return ceil;
     }
 
-    //Floor in a Binary Search Tree
-    public static int findFloor(Node root, int key){
-        int floor=-1;
-        while (root!=null) {
-            if (root.value==key) {
+    // Floor in a Binary Search Tree
+    public static int findFloor(Node root, int key) {
+        int floor = -1;
+        while (root != null) {
+            if (root.value == key) {
                 return root.value;
             }
-            if (root.value< key) {
-                floor=root.value;
-                root=root.right;
-            }
-            else{
-                root=root.left;
+            if (root.value < key) {
+                floor = root.value;
+                root = root.right;
+            } else {
+                root = root.left;
             }
         }
         return floor;
     }
 
+    // Insert a node in Binary tree
+    public static Node insertNode(Node root, int val) {
+        if (root == null) return new Node(val);
+        Node curr = root;
+        while (true) {
+            if (curr.value <= val) {
+                if (curr.right!=null) {
+                    curr=curr.right;
+                } else {
+                    curr.right= new Node(val);
+                    break;
+                }
+            } else {
+                if (curr.left!=null) {
+                    curr=curr.left;
+                } else {
+                    curr.left= new Node(val);
+                    break;
+                }
+            }
+        }
+        return root;
+    }
+
+    //Delete a node from binary tree
+    public static Node deleteNode(Node root, int key ){
+        if (root==null) {
+            return null;
+        }
+
+        if (key < root.value) {
+            root.left=deleteNode(root.left, key);
+        }else if(key> root.value){
+            root.right=deleteNode(root.right, key);
+        }
+        else{
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+
+            root.value=findMin(root.right);
+            root.right = deleteNode(root.right, root.value);
+        }
+        return root;
+    }
+    private static int findMin(Node root){
+        while (root.left!=null) {
+            root=root.left;
+        }
+        return root.value;
+    }
+
+    //Validate BST
+    public static boolean isBST(Node root) {
+        return isBSTUtil(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }    
+    private static boolean isBSTUtil(Node root,int min,int max){
+        if (root==null) {
+            return true;
+        }
+        if (root.value<= min || root.value>=max) {
+            return false;
+        }
+        return isBSTUtil(root.left, min, root.value) && isBSTUtil(root.right, root.value, max );
+    }
 
     
 
     public static void main(String[] args) {
-        // Creating the following asymmetric binary tree
-        //        10
-        //       /  \
-        //      4    5
-        //     / \  / \
-        //    3   2 11 9
-        //   / \     \
-        //  4   7     8
+        // Creating a BST of height 2
+        //         10
+        //        /  \
+        //       5    15
+        //      / \   / \
+        //     3   7 12  20
+
+        Node root = new Node(10); // Root node
+        root.left = new Node(5);   // Left child of root
+        root.right = new Node(15);  // Right child of root
         
-        Node root = new Node(10);          // Root node
-        root.left = new Node(4);           // Left subtree of root
-        root.right = new Node(5);          // Right subtree of root
-        root.left.left = new Node(3);      // Left child of node 4
-        root.left.right = new Node(2);     // Right child of node 4
-        root.right.left = new Node(11);    // Left child of node 5
-        root.right.right = new Node(9);    // Right child of node 5
-        root.left.left.left = new Node(4); // Left child of node 3
-        root.left.left.right = new Node(7);// Right child of node 3
-        root.right.left.right = new Node(8); // Right child of node 11
+        root.left.left = new Node(3);  // Left child of node 5
+        root.left.right = new Node(7);  // Right child of node 5
+        
+        root.right.left = new Node(12); // Left child of node 15
+        root.right.right = new Node(22); // Right child of node 15
+        
 
-        Node r= searchBST(root, 8);
-
-        int answer =r.value;
+        boolean answer = isBST(root);
         // Printing the result
         System.out.println(answer);
     }
