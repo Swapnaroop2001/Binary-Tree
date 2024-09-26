@@ -6,6 +6,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
 
+
 /**
  * BinaryTree
  */
@@ -696,9 +697,9 @@ public class BinaryTree {
 
     //Validate BST
     public static boolean isBST(Node root) {
-        return isBSTUtil(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return isBSTUtil(root, Long.MIN_VALUE, Integer.MAX_VALUE);
     }    
-    private static boolean isBSTUtil(Node root,int min,int max){
+    private static boolean isBSTUtil(Node root,long min,long max){
         if (root==null) {
             return true;
         }
@@ -708,6 +709,20 @@ public class BinaryTree {
         return isBSTUtil(root.left, min, root.value) && isBSTUtil(root.right, root.value, max );
     }
 
+    //LCA in BST
+    public static Node lowestCommonAncestorBST(Node root, Node p, Node q) {
+        if (root== null){
+            return null;
+        }
+        Node curr= root;
+        if (curr.value< p.value && curr.value< q.value) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        if (curr.value> p.value && curr.value> q.value) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        return root;
+    }
     
 
     public static void main(String[] args) {
@@ -719,7 +734,7 @@ public class BinaryTree {
         //     3   7 12  20
 
         Node root = new Node(10); // Root node
-        root.left = new Node(5);   // Left child of root
+        root.left = new Node(89);   // Left child of root
         root.right = new Node(15);  // Right child of root
         
         root.left.left = new Node(3);  // Left child of node 5
@@ -729,8 +744,8 @@ public class BinaryTree {
         root.right.right = new Node(22); // Right child of node 15
         
 
-        boolean answer = isBST(root);
+        
         // Printing the result
-        System.out.println(answer);
+        // System.out.println(answer);
     }
 }
