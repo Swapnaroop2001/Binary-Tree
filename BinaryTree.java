@@ -744,6 +744,21 @@ public class BinaryTree {
         }
         inordertraversal(root.right, k );
     }
+
+    //Inorder Successor in BST
+    public static TreeNode inorderSuccessor(TreeNode root, TreeNode p){
+        TreeNode successor= null;
+        while(root!=null){
+            if (p.val>=root.val) {
+                root=root.right;
+            }
+            else{
+                successor=root;
+                root=root.left;
+            }
+        }
+        return successor;
+    }
     
 
     public static void main(String[] args) {
@@ -764,9 +779,9 @@ public class BinaryTree {
         root.right.left = new TreeNode(12); // Left child of TreeNode 15
         root.right.right = new TreeNode(22); // Right child of TreeNode 15
         
-
-        int answer= kthSmallest(root, 2);
+        TreeNode k= new TreeNode(3);
+        TreeNode answer= inorderSuccessor(root, k);
         // Printing the result
-        System.out.println(answer);
+        System.out.println(answer.val);
     }
 }
